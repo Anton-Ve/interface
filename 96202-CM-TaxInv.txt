@@ -1,7 +1,7 @@
 <sourceEnvironment>http://msk-ad04-repccb.ad.ies-holding.com:9002/spl/usermap?language=RUS</sourceEnvironment><sourceProductVersion>Customer Release IES-B.PCK4.001.002</sourceProductVersion><bundle> 
 <entities> 
 <processingSequence>1</processingSequence><sequence>1</sequence><mo>SCRIPT</mo><pk1>CM_TaxInv</pk1><bo>F1-ScriptPhysicalBO</bo><boData> 
-<script>CM_TaxInv</script><longDescription>Добавление нумерации в СФ</longDescription><schema> 
+<script>CM_TaxInv</script><longDescription>Р”РѕР±Р°РІР»РµРЅРёРµ РЅСѓРјРµСЂР°С†РёРё РІ РЎР¤</longDescription><schema> 
 <schemaDefinition><![CDATA[<schema> 
     <output type="group"> 
         <includeBO name="CM-TaxInvoicePhysicalBO"/> 
@@ -13,7 +13,7 @@
     move "parm/accountId" to "F1-DoesEntityExist/pkValue1";
     invokeBS 'F1-DoesEntityExist' using "F1-DoesEntityExist";
     if ("string(F1-DoesEntityExist/entityExists) = 'false'")
-        terminate with error (90002, 36000 %1='Не найден лицевой счет' %2= "parm/accountId");
+        terminate with error (90002, 36000 %1='РќРµ РЅР°Р№РґРµРЅ Р»РёС†РµРІРѕР№ СЃС‡РµС‚' %2= "parm/accountId");
     end-if;
 end-if;
 
@@ -22,7 +22,7 @@ if ("string(parm/cmTaxInvoiceId) != $BLANK")
     move "parm/cmTaxInvoiceId" to "F1-DoesEntityExist/pkValue1";
     invokeBS 'F1-DoesEntityExist' using "F1-DoesEntityExist";
     if ("string(F1-DoesEntityExist/entityExists) = 'false'")
-        terminate with error (90002, 36000 %1='Не найдена СФ' %2= "parm/cmTaxInvoiceId");
+        terminate with error (90002, 36000 %1='РќРµ РЅР°Р№РґРµРЅР° РЎР¤' %2= "parm/cmTaxInvoiceId");
     end-if;
 end-if;
 
@@ -30,7 +30,7 @@ if ("string(parm/cmTaxNumber) = $BLANK" )
     move 'CM_TAX_INV' to "F1-DoesEntityExist/mo";
     move "parm/cmTaxNumber" to "F1-DoesEntityExist/pkValue1";
     invokeBS 'F1-DoesEntityExist' using "F1-DoesEntityExist";
- terminate with error (90002, 36000 %1='Не все обязательные поля заполнены');
+ terminate with error (90002, 36000 %1='РќРµ РІСЃРµ РѕР±СЏР·Р°С‚РµР»СЊРЅС‹Рµ РїРѕР»СЏ Р·Р°РїРѕР»РЅРµРЅС‹');
 end-if;
 
 move "parm/accountId" to "CM-TaxInvoicePhysicalBO/accountId";
@@ -180,9 +180,9 @@ invokeBO 'CM-TaxInvoicePhysicalBO' using "CM-TaxInvoicePhysicalBO" for update;]]
         <partOfCurrentAmount mapField="PART_CUR_AMT"/> 
     </cmTaxSourceFT> 
 </schema>]]> 
-</schemaDefinition><schemaName>CM-TaxInvoicePhysicalBO</schemaName><schemaType>F1BO</schemaType><customizationOwner>CM</customizationOwner><version>3</version></schema><instanceControl>F1NA</instanceControl><applicationServiceId>CMLFTXIP</applicationServiceId><description>Счет-фактура - Физический БО</description><customizationOwner>CM</customizationOwner><maintenanceObject>CM_TAX_INV</maintenanceObject><version>4</version><lifecycleBusinessObject>CM-TaxInvoicePhysicalBO</lifecycleBusinessObject></boData></entities><entities> 
+</schemaDefinition><schemaName>CM-TaxInvoicePhysicalBO</schemaName><schemaType>F1BO</schemaType><customizationOwner>CM</customizationOwner><version>3</version></schema><instanceControl>F1NA</instanceControl><applicationServiceId>CMLFTXIP</applicationServiceId><description>РЎС‡РµС‚-С„Р°РєС‚СѓСЂР° - Р¤РёР·РёС‡РµСЃРєРёР№ Р‘Рћ</description><customizationOwner>CM</customizationOwner><maintenanceObject>CM_TAX_INV</maintenanceObject><version>4</version><lifecycleBusinessObject>CM-TaxInvoicePhysicalBO</lifecycleBusinessObject></boData></entities><entities> 
 <processingSequence>3</processingSequence><sequence>3</sequence><mo>F1-BUS SVC</mo><pk1>F1-DoesEntityExist</pk1><bo>F1-BusinessServicePhysicalBO</bo><boData> 
-<businessService>F1-DoesEntityExist</businessService><longDescription>Определяет существование объекта. Входные параметры: бизнес-структура, первичные ключи 1-5. Выходные параметры: "true", если объект существует; "false" во всех других случаях; текущая версия (при наличии объекта).</longDescription><schema> 
+<businessService>F1-DoesEntityExist</businessService><longDescription>РћРїСЂРµРґРµР»СЏРµС‚ СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ РѕР±СЉРµРєС‚Р°. Р’С…РѕРґРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹: Р±РёР·РЅРµСЃ-СЃС‚СЂСѓРєС‚СѓСЂР°, РїРµСЂРІРёС‡РЅС‹Рµ РєР»СЋС‡Рё 1-5. Р’С‹С…РѕРґРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹: "true", РµСЃР»Рё РѕР±СЉРµРєС‚ СЃСѓС‰РµСЃС‚РІСѓРµС‚; "false" РІРѕ РІСЃРµС… РґСЂСѓРіРёС… СЃР»СѓС‡Р°СЏС…; С‚РµРєСѓС‰Р°СЏ РІРµСЂСЃРёСЏ (РїСЂРё РЅР°Р»РёС‡РёРё РѕР±СЉРµРєС‚Р°).</longDescription><schema> 
 <schemaDefinition><![CDATA[<schema> 
     <mo mapField="MAINT_OBJ_CD" required="true"/>  
     <pkValue1 mapField="PK_VALUE1" required="true"/>  
@@ -193,14 +193,14 @@ invokeBO 'CM-TaxInvoicePhysicalBO' using "CM-TaxInvoicePhysicalBO" for update;]]
     <entityExists mapField="ENTITY_EXIST_SW"/>  
     <version mapField="VERSION"/> 
 </schema>]]> 
-</schemaDefinition><schemaName>F1-DoesEntityExist</schemaName><schemaType>F1BS</schemaType><customizationOwner>F1</customizationOwner><version>1</version></schema><applicationServiceId>F1-DFLTS</applicationServiceId><customizationOwner>F1</customizationOwner><description>Проверка существования объекта</description><serviceName>F1LCIEEP</serviceName><version>1</version></boData></entities><entities> 
+</schemaDefinition><schemaName>F1-DoesEntityExist</schemaName><schemaType>F1BS</schemaType><customizationOwner>F1</customizationOwner><version>1</version></schema><applicationServiceId>F1-DFLTS</applicationServiceId><customizationOwner>F1</customizationOwner><description>РџСЂРѕРІРµСЂРєР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ РѕР±СЉРµРєС‚Р°</description><serviceName>F1LCIEEP</serviceName><version>1</version></boData></entities><entities> 
 <processingSequence>4</processingSequence><sequence>4</sequence><mo>F1-EXT LKUP</mo><pk1>CM-MIGRATION-PROFILE</pk1><pk2>CM_TaxInv</pk2><bo>F1-ExtLkpPhysicalBO</bo><boData> 
-<businessObject>CM-MIGRATION-PROFILE</businessObject><value>CM_TaxInv</value><customizationOwner>CM</customizationOwner><description>Добавление нумерации в СФ</description><businessObjectDataArea><![CDATA[<schemaType>F1SC</schemaType><schemaName>CM_TaxInv</schemaName><batchControl>CM-F-VZ</batchControl><threadCount>10</threadCount><sqlError><![CDATA[select accountId "ID ЛС",
-       cmTaxInvoiceId "ID СФ",
-    cmTaxNumber "№ СФ",
-       REGEXP_SUBSTR(FL.DESCRLONG,'\d{1,}') "Категория ошибки",
-       REGEXP_SUBSTR(FL.DESCRLONG,'\d{1,}',1,2) "Код ошибки",
-       SUBSTR(FL.DESCRLONG, INSTR(FL.DESCRLONG,': ')+2, 4000) "Текст ошибки"
+<businessObject>CM-MIGRATION-PROFILE</businessObject><value>CM_TaxInv</value><customizationOwner>CM</customizationOwner><description>Р”РѕР±Р°РІР»РµРЅРёРµ РЅСѓРјРµСЂР°С†РёРё РІ РЎР¤</description><businessObjectDataArea><![CDATA[<schemaType>F1SC</schemaType><schemaName>CM_TaxInv</schemaName><batchControl>CM-F-VZ</batchControl><threadCount>10</threadCount><sqlError><![CDATA[select accountId "ID Р›РЎ",
+       cmTaxInvoiceId "ID РЎР¤",
+    cmTaxNumber "в„– РЎР¤",
+       REGEXP_SUBSTR(FL.DESCRLONG,'\d{1,}') "РљР°С‚РµРіРѕСЂРёСЏ РѕС€РёР±РєРё",
+       REGEXP_SUBSTR(FL.DESCRLONG,'\d{1,}',1,2) "РљРѕРґ РѕС€РёР±РєРё",
+       SUBSTR(FL.DESCRLONG, INSTR(FL.DESCRLONG,': ')+2, 4000) "РўРµРєСЃС‚ РѕС€РёР±РєРё"
   from f1_fact f join
        f1_fact_char fc on f.fact_id = fc.fact_id join 
        F1_FACT_LOG FL ON F.FACT_ID = FL.FACT_ID AND FL.LOG_ENTRY_TYPE_FLG = 'F1US' 
@@ -215,5 +215,5 @@ invokeBO 'CM-TaxInvoicePhysicalBO' using "CM-TaxInvoicePhysicalBO" for update;]]
                        ) tt on 1=1      
  where f.bo_status_cd = 'ERROR' and
        fc.char_type_cd = 'ITSM' and
-       fc.srch_char_val = :P]]]]><![CDATA[></sqlError><groupBy><schemaNodeName>accountId</schemaNodeName></groupBy><groupBy><schemaNodeName>cmTaxInvoiceId</schemaNodeName></groupBy><groupBy><schemaNodeName>cmTaxNumber</schemaNodeName></groupBy><columnNodeMatching><schemaNodeName>accountId</schemaNodeName><fileColumnName>ID ЛС</fileColumnName><mask>lpad(:P,10,0)</mask></columnNodeMatching><columnNodeMatching><schemaNodeName>cmTaxInvoiceId</schemaNodeName><fileColumnName>ID СФ</fileColumnName><mask>lpad(:P,12,0)</mask></columnNodeMatching><columnNodeMatching><schemaNodeName>cmTaxNumber</schemaNodeName><fileColumnName>№ СФ</fileColumnName><mask>upper(:P)</mask></columnNodeMatching>]]></businessObjectDataArea><extendedLookupValueCharacteristic> 
+       fc.srch_char_val = :P]]]]><![CDATA[></sqlError><groupBy><schemaNodeName>accountId</schemaNodeName></groupBy><groupBy><schemaNodeName>cmTaxInvoiceId</schemaNodeName></groupBy><groupBy><schemaNodeName>cmTaxNumber</schemaNodeName></groupBy><columnNodeMatching><schemaNodeName>accountId</schemaNodeName><fileColumnName>ID Р›РЎ</fileColumnName><mask>lpad(:P,10,0)</mask></columnNodeMatching><columnNodeMatching><schemaNodeName>cmTaxInvoiceId</schemaNodeName><fileColumnName>ID РЎР¤</fileColumnName><mask>lpad(:P,12,0)</mask></columnNodeMatching><columnNodeMatching><schemaNodeName>cmTaxNumber</schemaNodeName><fileColumnName>в„– РЎР¤</fileColumnName><mask>upper(:P)</mask></columnNodeMatching>]]></businessObjectDataArea><extendedLookupValueCharacteristic> 
 <businessObject>CM-MIGRATION-PROFILE</businessObject><value>CM_TaxInv</value><characteristicType>APP-SVC</characteristicType><sequence>1</sequence><characteristicValueForeignKey1>CMLFTXIP</characteristicValueForeignKey1><searchCharacteristicValue>CMLFTXIP</searchCharacteristicValue><customizationOwner>CM</customizationOwner><version>2</version></extendedLookupValueCharacteristic><version>6</version><lookupUsage>F1AC</lookupUsage></boData></entities></bundle>
