@@ -1,0 +1,219 @@
+<sourceEnvironment>http://msk-ad04-repccb.ad.ies-holding.com:9002/spl/usermap?language=RUS</sourceEnvironment><sourceProductVersion>Customer Release IES-B.PCK4.001.002</sourceProductVersion><bundle> 
+<entities> 
+<processingSequence>1</processingSequence><sequence>1</sequence><mo>SCRIPT</mo><pk1>CM_TaxInv</pk1><bo>F1-ScriptPhysicalBO</bo><boData> 
+<script>CM_TaxInv</script><longDescription>Добавление нумерации в СФ</longDescription><schema> 
+<schemaDefinition><![CDATA[<schema> 
+    <output type="group"> 
+        <includeBO name="CM-TaxInvoicePhysicalBO"/> 
+    </output> 
+</schema>]]> 
+</schemaDefinition><schemaName>CM_TaxInv</schemaName><schemaType>F1SC</schemaType><customizationOwner>CM</customizationOwner><version>2</version></schema><applicationServiceId>F1-DFLTS</applicationServiceId><scriptStep> 
+<customizationOwner>CM</customizationOwner><version>6</version><scriptStepForFalse>0</scriptStepForFalse><scriptStepForTrue>0</scriptStepForTrue><stepType>EDDT</stepType><stepSequence>1</stepSequence><doesTextContainVariables>false</doesTextContainVariables><sortSequence>10</sortSequence><editDataArea><![CDATA[if ("string(parm/servicePoint) != $BLANK") 
+    move 'CM_TAX_INV' to "F1-DoesEntityExist/mo";
+    move "parm/accountId" to "F1-DoesEntityExist/pkValue1";
+    invokeBS 'F1-DoesEntityExist' using "F1-DoesEntityExist";
+    if ("string(F1-DoesEntityExist/entityExists) = 'false'")
+        terminate with error (90002, 36000 %1='Не найден лицевой счет' %2= "parm/accountId");
+    end-if;
+end-if;
+
+if ("string(parm/cmTaxInvoiceId) != $BLANK") 
+    move 'CM_TAX_INV' to "F1-DoesEntityExist/mo";
+    move "parm/cmTaxInvoiceId" to "F1-DoesEntityExist/pkValue1";
+    invokeBS 'F1-DoesEntityExist' using "F1-DoesEntityExist";
+    if ("string(F1-DoesEntityExist/entityExists) = 'false'")
+        terminate with error (90002, 36000 %1='Не найдена СФ' %2= "parm/cmTaxInvoiceId");
+    end-if;
+end-if;
+
+if ("string(parm/cmTaxNumber) = $BLANK" ) 
+    move 'CM_TAX_INV' to "F1-DoesEntityExist/mo";
+    move "parm/cmTaxNumber" to "F1-DoesEntityExist/pkValue1";
+    invokeBS 'F1-DoesEntityExist' using "F1-DoesEntityExist";
+ terminate with error (90002, 36000 %1='Не все обязательные поля заполнены');
+end-if;
+
+move "parm/accountId" to "CM-TaxInvoicePhysicalBO/accountId";
+move "parm/cmTaxInvoiceId" to "CM-TaxInvoicePhysicalBO/cmTaxInvoiceId";
+move "parm/cmTaxNumber" to "CM-TaxInvoicePhysicalBO/cmTaxNumber";
+invokeBO 'CM-TaxInvoicePhysicalBO' using "CM-TaxInvoicePhysicalBO" for update;]]> 
+</editDataArea><nextScriptStep>0</nextScriptStep><canDisplay>false</canDisplay><script>CM_TaxInv</script></scriptStep><scriptType>SVSC</scriptType><customizationOwner>CM</customizationOwner><scriptEngineVersion>F120</scriptEngineVersion><scriptDataArea> 
+<schemaType>F1BO</schemaType><script>CM_TaxInv</script><customizationOwner>CM</customizationOwner><schemaName>CM-TaxInvoicePhysicalBO</schemaName><dataAreaType>SCHM</dataAreaType><dataAreaName>CM-TaxInvoicePhysicalBO</dataAreaName><version>1</version></scriptDataArea><scriptDataArea> 
+<schemaType>F1BS</schemaType><script>CM_TaxInv</script><customizationOwner>CM</customizationOwner><schemaName>F1-DoesEntityExist</schemaName><dataAreaType>SCHM</dataAreaType><dataAreaName>F1-DoesEntityExist</dataAreaName><version>1</version></scriptDataArea><scriptDataArea> 
+<schemaType>F1SC</schemaType><script>CM_TaxInv</script><customizationOwner>CM</customizationOwner><schemaName>CM_TaxInv</schemaName><dataAreaType>SCSM</dataAreaType><dataAreaName>parm</dataAreaName><version>1</version></scriptDataArea><version>10</version><eligibilityOption>SENE</eligibilityOption></boData></entities><entities> 
+<processingSequence>2</processingSequence><sequence>2</sequence><mo>F1-BUS OBJ</mo><pk1>CM-TaxInvoicePhysicalBO</pk1><bo>F1-BusinessObjectPhysicalBO</bo><boData> 
+<businessObject>CM-TaxInvoicePhysicalBO</businessObject><schema> 
+<schemaDefinition><![CDATA[<schema> 
+    <cmTaxInvoiceId mapField="CM_TAX_INVOICE_ID"/>  
+    <CM_TI_TYPE_CD mapField="CM_TI_TYPE_CD"/>  
+    <cmTaxInvoiceStatus mapField="CM_TI_STATUS_FLG"/>  
+    <cmTaxNumber mapField="CM_TAX_NUM"/>  
+    <cmTaxIsprNum mapField="CM_TAX_ISPR_NUM"/>  
+    <taxInvoiceDate mapField="TAX_INV_DATE"/>  
+    <cmApprovDate mapField="APPROV_DATE"/>  
+    <taxPeriodDate mapField="TAX_PERIOD_DATE"/>  
+    <cmTaxInvIsprDate mapField="TAX_INV_ISPR_DATE"/>  
+    <cmCancelDate mapField="CANCEL_DATE"/>  
+    <cmCancelReasonFlg mapField="CANCEL_REASON_FLG"/>  
+    <accountId mapField="ACCT_ID"/>  
+    <cmTaxInvoiceGroup mapField="TAX_INV_GROUP_CD"/>  
+    <tkTypeNach mapField="TK_TYPE_NACH"/>  
+    <buyerPersonId mapField="BUYER_PER_ID"/>  
+    <cmBuyerNDoc mapField="BUYER_N_DOG"/>  
+    <cmBuyerDDoc mapField="BUYER_D_DOG"/>  
+    <cmBuyerName mapField="BUYER_NAME"/>  
+    <cmBuyerInn mapField="BUYER_INN"/>  
+    <cmBuyerKpp mapField="BUYER_KPP"/>  
+    <cmBuyerAddr mapField="BUYER_ADDR"/>  
+    <sellerPersonId mapField="SELLER_PER_ID"/>  
+    <cmSellerName mapField="SELLER_NAME"/>  
+    <cmSellerInn mapField="SELLER_INN"/>  
+    <cmSellerKpp mapField="SELLER_KPP"/>  
+    <cmSellerAddr mapField="SELLER_ADDR"/>  
+    <cmRealSellerPerId mapField="REAL_SELLER_PER_ID"/>  
+    <sendPersonId mapField="SEND_PER_ID"/>  
+    <cmSendName mapField="SEND_NAME"/>  
+    <cmSendAddr mapField="SEND_ADDR"/>  
+    <receivePersonId mapField="RECEIVE_PER_ID"/>  
+    <cmReceiveName mapField="RECEIVE_NAME"/>  
+    <cmReceiveAddr mapField="RECEIVE_ADDR"/>  
+    <bankAccount mapField="BANK_ACCOUNT"/>  
+    <bankName mapField="BANK_NAME"/>  
+    <bankBic mapField="BANK_BIC"/>  
+    <bankKorrAccount mapField="BANK_KORR_ACCOUNT"/>  
+    <createDateTime mapField="CREATE_DTTM"/>  
+    <version mapField="VERSION"/>  
+    <otdelPerId mapField="OTDEL_PER_ID"/>  
+    <billId mapField="BILL_ID"/>  
+    <adjustmentId mapField="ADJ_ID"/>  
+    <paymentEventId mapField="PAY_EVENT_ID"/>  
+    <cmLinkTaxInvoiceId mapField="CM_LINK_TAX_ID"/>  
+    <cmIsprLinkTaxId mapField="CM_ISPR_LINK_TAX_ID"/>  
+    <cmAdvLinkTaxId mapField="CM_ADV_LINK_TAX_ID"/>  
+    <cmAgentSchemFlg mapField="AGENT_SCHEM_FLG"/>  
+    <batchControl mapField="BATCH_CD"/>  
+    <batchNumber mapField="BATCH_NBR"/>  
+    <oikId mapField="CM_OIK_ID"/>  
+    <cmSequenceNumber mapField="CM_SEQ_NUM"/>  
+    <additionalInfo mapField="ADD_INFO"/>  
+    <applyCalcPercentFlg mapField="APPLY_CALC_PERCENT_FLG"/>  
+    <payNumbers mapField="PAY_NUMBERS"/>  
+    <lastDatePay mapField="LAST_DATE_PAY"/>  
+    <totalAmount mapField="TOTAL_AMT"/>  
+    <cmTotalBaseAmount mapField="CM_TOTAL_BASE_AMOUNT"/>  
+    <cmTotalNdsAmount mapField="CM_TOTAL_NDS_AMOUNT"/>  
+    <businessObject mapField="BUS_OBJ_CD"/>  
+    <status mapField="BO_STATUS_CD"/>  
+    <statusDateTime mapField="STATUS_UPD_DTTM"/>  
+    <cmReceiveINN mapField="RECEIVE_INN"/>  
+    <cmReceiveKPP mapField="RECEIVE_KPP"/>  
+    <cmSendINN mapField="SEND_INN"/>  
+    <cmSendKPP mapField="SEND_KPP"/>  
+    <factId mapField="FACT_ID"/>  
+    <sprovPerId mapField="SPROV_PER_ID"/>  
+    <sprovName mapField="SPROV_NAME"/>  
+    <sprovAddr mapField="SPROV_ADDR"/>  
+    <sprovInn mapField="SPROV_INN"/>  
+    <sprovKpp mapField="SPROV_KPP"/>  
+    <isSimpleTaxSystem mapField="CM_TAX_SYS_SMPL_SW"/>  
+    <cmTaxInvoiceDetail type="list" mapChild="CM_TAX_INVOICE_DTL"> 
+        <cmGoodsName mapField="GOODS_NAME"/>  
+        <maxPowCd mapField="MAX_POW_CD"/>  
+        <naprCd mapField="NAPR_CD"/>  
+        <priceCat mapField="PRICE_CAT"/>  
+        <tzCd mapField="TZ_CD"/>  
+        <cmTaxInvoiceId mapField="CM_TAX_INVOICE_ID"/>  
+        <sequence mapField="SEQNO"/>  
+        <cmCommodityName mapField="CM_DESC100"/>  
+        <unitOfMeasure mapField="UOM_CD"/>  
+        <cmServiceQuantity mapField="CM_SVC_QUANTITY"/>  
+        <cmPriceValue mapField="CM_PRICE_VAL"/>  
+        <cmTaxPercent mapField="CM_TAX_PERCENT"/>  
+        <cmTaxAmount mapField="CM_TAX_AMOUNT"/>  
+        <cmBaseAmount mapField="CM_BASE_AMOUNT"/>  
+        <totalAmount mapField="TOTAL_AMT"/>  
+        <cmPriceType mapField="CM_PRICE_TYPE_FLG"/>  
+        <cmPeriodStartDate mapField="CM_PERIOD_START_DT"/>  
+        <cmPeriodEndDate mapField="CM_PERIOD_END_DT"/>  
+        <financialTransactionType mapField="FT_TYPE_FLG"/>  
+        <financialTransactionId mapField="FT_ID"/>  
+        <cmTaxIncluded mapField="CM_TAX_INCL_FLG"/>  
+        <seqNoIt mapField="SEQNO_IT"/>  
+        <version mapField="VERSION"/>  
+        <cmTiLineTypeLookup mapField="CM_TI_LINE_TYPE_FLG"/>  
+        <parentId mapField="PARENT_ID"/> 
+    </cmTaxInvoiceDetail>  
+    <cmTaxInvoiceSourceDetail type="list" mapChild="CM_TAX_SOURCE_DTL"> 
+        <accountingDate mapField="ACCOUNTING_DT"/>  
+        <cmBaseAmount mapField="CM_BASE_AMOUNT"/>  
+        <cmCommodityName mapField="CM_DESC100"/>  
+        <cmPriceValue mapField="CM_PRICE_VAL"/>  
+        <cmServiceQuantity mapField="CM_SVC_QUANTITY"/>  
+        <cmTaxAmount mapField="CM_TAX_AMOUNT"/>  
+        <cmTaxIncluded mapField="CM_TAX_INCL_FLG"/>  
+        <cmTaxInvoiceId mapField="CM_TAX_INVOICE_ID"/>  
+        <cmTaxPercent mapField="CM_TAX_PERCENT"/>  
+        <cmTiLineTypeLookup mapField="CM_TI_LINE_TYPE_FLG"/>  
+        <financialTransactionId mapField="FT_ID"/>  
+        <financialTransactionType mapField="FT_TYPE_FLG"/>  
+        <cmGoodsName mapField="GOODS_NAME"/>  
+        <headerSequence mapField="HEADER_SEQ"/>  
+        <lineSequence mapField="LINE_SEQNO"/>  
+        <maxPowCd mapField="MAX_POW_CD"/>  
+        <naprCd mapField="NAPR_CD"/>  
+        <nowFt mapField="NOW_FT"/>  
+        <priceCat mapField="PRICE_CAT"/>  
+        <sequence mapField="SEQNO"/>  
+        <seqNoIt mapField="SEQNO_IT"/>  
+        <siblingId mapField="SIBLING_ID"/>  
+        <totalAmount mapField="TOTAL_AMT"/>  
+        <tzCd mapField="TZ_CD"/>  
+        <unitOfMeasure mapField="UOM_CD"/>  
+        <version mapField="VERSION"/> 
+    </cmTaxInvoiceSourceDetail>  
+    <cmTaxSourceFT type="list" mapChild="CM_TAX_SOURCE_FT"> 
+        <version mapField="VERSION"/>  
+        <financialTransactionId mapField="FT_ID"/>  
+        <cmTaxInvoiceId mapField="CM_TAX_INVOICE_ID"/>  
+        <cmSFTLinkType mapField="CM_SFT_LINK_TYPE_FLG"/>  
+        <tiJournalId mapField="TI_JOURNAL_ID"/>  
+        <partOfCurrentAmount mapField="PART_CUR_AMT"/> 
+    </cmTaxSourceFT> 
+</schema>]]> 
+</schemaDefinition><schemaName>CM-TaxInvoicePhysicalBO</schemaName><schemaType>F1BO</schemaType><customizationOwner>CM</customizationOwner><version>3</version></schema><instanceControl>F1NA</instanceControl><applicationServiceId>CMLFTXIP</applicationServiceId><description>Счет-фактура - Физический БО</description><customizationOwner>CM</customizationOwner><maintenanceObject>CM_TAX_INV</maintenanceObject><version>4</version><lifecycleBusinessObject>CM-TaxInvoicePhysicalBO</lifecycleBusinessObject></boData></entities><entities> 
+<processingSequence>3</processingSequence><sequence>3</sequence><mo>F1-BUS SVC</mo><pk1>F1-DoesEntityExist</pk1><bo>F1-BusinessServicePhysicalBO</bo><boData> 
+<businessService>F1-DoesEntityExist</businessService><longDescription>Определяет существование объекта. Входные параметры: бизнес-структура, первичные ключи 1-5. Выходные параметры: "true", если объект существует; "false" во всех других случаях; текущая версия (при наличии объекта).</longDescription><schema> 
+<schemaDefinition><![CDATA[<schema> 
+    <mo mapField="MAINT_OBJ_CD" required="true"/>  
+    <pkValue1 mapField="PK_VALUE1" required="true"/>  
+    <pkValue2 mapField="PK_VALUE2"/>  
+    <pkValue3 mapField="PK_VALUE3"/>  
+    <pkValue4 mapField="PK_VALUE4"/>  
+    <pkValue5 mapField="PK_VALUE5"/>  
+    <entityExists mapField="ENTITY_EXIST_SW"/>  
+    <version mapField="VERSION"/> 
+</schema>]]> 
+</schemaDefinition><schemaName>F1-DoesEntityExist</schemaName><schemaType>F1BS</schemaType><customizationOwner>F1</customizationOwner><version>1</version></schema><applicationServiceId>F1-DFLTS</applicationServiceId><customizationOwner>F1</customizationOwner><description>Проверка существования объекта</description><serviceName>F1LCIEEP</serviceName><version>1</version></boData></entities><entities> 
+<processingSequence>4</processingSequence><sequence>4</sequence><mo>F1-EXT LKUP</mo><pk1>CM-MIGRATION-PROFILE</pk1><pk2>CM_TaxInv</pk2><bo>F1-ExtLkpPhysicalBO</bo><boData> 
+<businessObject>CM-MIGRATION-PROFILE</businessObject><value>CM_TaxInv</value><customizationOwner>CM</customizationOwner><description>Добавление нумерации в СФ</description><businessObjectDataArea><![CDATA[<schemaType>F1SC</schemaType><schemaName>CM_TaxInv</schemaName><batchControl>CM-F-VZ</batchControl><threadCount>10</threadCount><sqlError><![CDATA[select accountId "ID ЛС",
+       cmTaxInvoiceId "ID СФ",
+    cmTaxNumber "№ СФ",
+       REGEXP_SUBSTR(FL.DESCRLONG,'\d{1,}') "Категория ошибки",
+       REGEXP_SUBSTR(FL.DESCRLONG,'\d{1,}',1,2) "Код ошибки",
+       SUBSTR(FL.DESCRLONG, INSTR(FL.DESCRLONG,': ')+2, 4000) "Текст ошибки"
+  from f1_fact f join
+       f1_fact_char fc on f.fact_id = fc.fact_id join 
+       F1_FACT_LOG FL ON F.FACT_ID = FL.FACT_ID AND FL.LOG_ENTRY_TYPE_FLG = 'F1US' 
+       join xmltable('/Body' passing xmltype('<?xml version="1.0" encoding="UTF-8"?> <Body>'||f.fact_data_area||'</Body>')
+                          columns accountId  char(10) path 'grRequest/request/CM_TaxInv/accountId'  
+                          ) x on 1=1 
+       join xmltable('/Body' passing xmltype('<?xml version="1.0" encoding="UTF-8"?> <Body>'||f.fact_data_area||'</Body>')
+                          columns cmTaxInvoiceId  char(12) path 'cmTaxInvoiceId'
+                       ) t on 1=1
+       join xmltable('/Body' passing xmltype('<?xml version="1.0" encoding="UTF-8"?> <Body>'||f.fact_data_area||'</Body>')
+                          columns cmTaxNumber  VARCHAR2(20) path 'cmTaxNumber'
+                       ) tt on 1=1      
+ where f.bo_status_cd = 'ERROR' and
+       fc.char_type_cd = 'ITSM' and
+       fc.srch_char_val = :P]]]]><![CDATA[></sqlError><groupBy><schemaNodeName>accountId</schemaNodeName></groupBy><groupBy><schemaNodeName>cmTaxInvoiceId</schemaNodeName></groupBy><groupBy><schemaNodeName>cmTaxNumber</schemaNodeName></groupBy><columnNodeMatching><schemaNodeName>accountId</schemaNodeName><fileColumnName>ID ЛС</fileColumnName><mask>lpad(:P,10,0)</mask></columnNodeMatching><columnNodeMatching><schemaNodeName>cmTaxInvoiceId</schemaNodeName><fileColumnName>ID СФ</fileColumnName><mask>lpad(:P,12,0)</mask></columnNodeMatching><columnNodeMatching><schemaNodeName>cmTaxNumber</schemaNodeName><fileColumnName>№ СФ</fileColumnName><mask>upper(:P)</mask></columnNodeMatching>]]></businessObjectDataArea><extendedLookupValueCharacteristic> 
+<businessObject>CM-MIGRATION-PROFILE</businessObject><value>CM_TaxInv</value><characteristicType>APP-SVC</characteristicType><sequence>1</sequence><characteristicValueForeignKey1>CMLFTXIP</characteristicValueForeignKey1><searchCharacteristicValue>CMLFTXIP</searchCharacteristicValue><customizationOwner>CM</customizationOwner><version>2</version></extendedLookupValueCharacteristic><version>6</version><lookupUsage>F1AC</lookupUsage></boData></entities></bundle>
